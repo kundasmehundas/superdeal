@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>קופה רושמת</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .register {
+            background: white;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .screen {
+            background: #a7d8a7;
+            color: #1a1a1a;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5em;
+            text-align: left;
+            direction: ltr;
+            flex-grow: 1;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 30px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1.2em;
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.3em;
+            text-align: left;
+            direction: ltr;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.3em;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .receipt {
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre;
+        }
+        .logo {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 30px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="register">
+        <div class="logo">🛒 סופר דיל</div>
+        <div class="screen">
+            <div class="receipt" id="receipt">====================
+קבלה דיגיטלית
+====================</div>
+        </div>
+        
+        <div class="input-group">
+            <label>מחיר מוצר 1 (₪):</label>
+            <input type="number" id="price1" min="0" step="0.01">
+        </div>
+        
+        <div class="input-group">
+            <label>מחיר מוצר 2 (₪):</label>
+            <input type="number" id="price2" min="0" step="0.01">
+        </div>
+
+        <button onclick="calculateDiscount()">חשב מחיר סופי</button>
+    </div>
+
+    <script>
+        function calculateDiscount() {
+            // Get input values
+            const price1 = parseFloat(document.getElementById('price1').value) || 0;
+            const price2 = parseFloat(document.getElementById('price2').value) || 0;
+
+            // Validate inputs
+            if (price1 < 0 || price2 < 0) {
+                alert("אנא הכנס מחירים חיוביים בלבד");
+                return;
+            }
+
+            // Calculate discounts
+            const lowerPrice = Math.min(price1, price2);
+            const higherPrice = Math.max(price1, price2);
+            
+            // Calculate discount (15% on cheaper item)
+            const discountedLowerPrice = lowerPrice * 0.85; // 15% off the lower price
+            const finalPrice = discountedLowerPrice + higherPrice;
+
+            // Create receipt
+            const now = new Date();
+            const receipt = `====================
+קבלה דיגיטלית
+====================
+${now.toLocaleDateString('he-IL')}
+${now.toLocaleTimeString('he-IL')}
+
+מחיר סופי:   ₪${finalPrice.toFixed(2)}
+====================
+
+תודה על קנייתכם!`;
+
+            // Display receipt
+            document.getElementById('receipt').textContent = receipt;
+        }
+    </script>
+</body>
+</html>
